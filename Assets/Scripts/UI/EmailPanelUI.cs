@@ -51,7 +51,8 @@ public class EmailPanelUI : MonoBehaviour
             if (itemUI != null)
             {
                 itemUI.SetupEmail(email, i);
-                itemUI.OnClick += () => EmailManager.Instance.SelectEmail(i);
+                int index = i; // 修复闭包：确保点击项索引正确
+                itemUI.OnClick += () => EmailManager.Instance.SelectEmail(index);
             }
             
             // 设置未读标记
@@ -61,42 +62,21 @@ public class EmailPanelUI : MonoBehaviour
             }
         }
     }
-    
+
+    private void OnCloseClick()
+    {
+        gameObject.SetActive(false);
+    }
     private void ShowEmailDetail(Email email)
     {
         if (email == null) return;
         
         senderText.text = $"发件人：{email.sender}";
         subjectText.text = email.subject;
-        dateText.text = email.date;
+        //dateText.text = email.date;
         contentText.text = email.content;
         
         // 显示/隐藏规则书按钮
         ruleBookButton.SetActive(email.hasRuleBook);
-    }
-}
-
-// 邮件项UI组件
-public class EmailItemUI : MonoBehaviour
-{
-    public TextMeshProUGUI senderText;
-    public TextMeshProUGUI subjectText;
-    public TextMeshProUGUI dateText;
-    public GameObject unreadMark;
-    public Button button;
-    
-    public System.Action OnClick;
-    
-    private void Start()
-    {
-        button.onClick.AddListener(() => OnClick?.Invoke());
-    }
-    
-    public void SetupEmail(Email email, int index)
-    {
-        senderText.text = email.sender;
-        subjectText.text = email.subject;
-        dateText.text = email.date;
-        unreadMark.SetActive(!email.isRead);
     }
 }

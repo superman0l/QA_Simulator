@@ -1,0 +1,16 @@
+{
+  "levels": [
+    {
+      "LevelNum": 1,
+      "EmailBeforeWork": [
+        "104"
+      ],
+      "BugsForToday": [
+        "101",
+        "102",
+        "103"
+      ],
+      "LevelTime": 120
+    }
+  ]
+}

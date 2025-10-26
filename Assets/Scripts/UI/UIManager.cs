@@ -64,14 +64,14 @@ public class UIManager : MonoBehaviour
     
     public void ShowEmailPanel()
     {
-        bugPanel.SetActive(false);
+        // bugPanel.SetActive(false);
         emailPanel.SetActive(true);
         ruleBookPanel.SetActive(false);
     }
     
     public void ShowRuleBookPanel()
     {
-        bugPanel.SetActive(false);
+        // bugPanel.SetActive(false);
         emailPanel.SetActive(false);
         ruleBookPanel.SetActive(true);
     }

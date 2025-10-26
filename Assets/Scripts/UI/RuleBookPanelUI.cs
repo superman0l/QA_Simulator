@@ -29,8 +29,8 @@ public class RuleBookPanelUI : MonoBehaviour
         prevButton.onClick.AddListener(OnPrevClick);
         nextButton.onClick.AddListener(OnNextClick);
         closeButton.onClick.AddListener(OnCloseClick);
-        collapseButton.onClick.AddListener(OnCollapseClick);
-        addNoteButton.onClick.AddListener(OnAddNoteClick);
+        //collapseButton.onClick.AddListener(OnCollapseClick);
+        //addNoteButton.onClick.AddListener(OnAddNoteClick);
         
         // 注册规则书事件
         RuleBookManager.Instance.OnPageChanged += UpdatePage;
@@ -47,7 +47,7 @@ public class RuleBookPanelUI : MonoBehaviour
         contentText.text = page.content;
         
         // 更新笔记列表
-        UpdateNotes(page.notes);
+        // UpdateNotes(page.notes);
         
         // 更新导航按钮状态
         UpdateNavigationButtons();

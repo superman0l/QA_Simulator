@@ -1,7 +1,8 @@
+using System.Collections.Generic;
+using System.Globalization;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System.Collections.Generic;
 
 public class BugPanelUI : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class BugPanelUI : MonoBehaviour
     
     [Header("Description")]
     public TextMeshProUGUI descriptionText;
+
+    [Header("Screenshot")]
+    public Image screenshotImage;
     
     [Header("Test Progress")]
     public GameObject progressBar;
@@ -31,7 +35,7 @@ public class BugPanelUI : MonoBehaviour
     private void Start()
     {
         // 注册按钮事件
-        autoTestButton.onClick.AddListener(OnAutoTestClick);
+        // 自动化跑测停用，按钮不绑定
         rejectButton.onClick.AddListener(OnRejectClick);
         approveButton.onClick.AddListener(OnApproveClick);
         
@@ -44,16 +48,39 @@ public class BugPanelUI : MonoBehaviour
     {
         if (bug == null) return;
         
-        titleText.text = "标题最多十个字十个字";
+        titleText.text = BugManager.Instance != null ? BugManager.Instance.GetCurrentBugTitle() : string.Empty;
         submitterText.text = $"提交人：{bug.submitter}";
         submitTimeText.text = $"提交时间：{bug.submitTime}";
-        versionText.text = $"提交版本：{bug.version}";
-        
+        // 版本号保留 1 位小数（若无法解析则原样显示）
+        string formattedVersion = bug.version;
+        if (!string.IsNullOrEmpty(bug.version) && float.TryParse(bug.version, NumberStyles.Float, CultureInfo.InvariantCulture, out var verFloat))
+        {
+            formattedVersion = verFloat.ToString("F1", CultureInfo.InvariantCulture);
+        }
+        versionText.text = $"提交版本：{formattedVersion}";
+
         // 更新文件列表
         UpdateFileList(bug.files);
         
         // 更新描述
         descriptionText.text = bug.description;
+
+        // 更新截图
+        if (screenshotImage != null)
+        {
+            var sprite = BugManager.Instance != null ? BugManager.Instance.GetCurrentBugScreenshotSprite() : null;
+            if (sprite != null)
+            {
+                screenshotImage.sprite = sprite;
+                screenshotImage.gameObject.SetActive(true);
+                var c = screenshotImage.color; c.a = 1f; screenshotImage.color = c;
+            }
+            else
+            {
+                screenshotImage.sprite = null;
+                screenshotImage.gameObject.SetActive(false);
+            }
+        }
         
         // 更新按钮状态
         UpdateButtonStates(bug);
@@ -77,22 +104,22 @@ public class BugPanelUI : MonoBehaviour
     
     private void UpdateTestProgress(float progress)
     {
-        progressBar.SetActive(true);
-        progressFill.fillAmount = progress;
-        progressText.text = $"自动化测试中，预计用时剩余 {(1 - progress) * 100:F0} 秒";
+        // 自动化跑测停用：隐藏进度条（如需显示，可恢复为原逻辑）
+        if (progressBar != null) progressBar.SetActive(false);
     }
     
     private void UpdateButtonStates(BugSubmission bug)
     {
-        bool testCompleted = !bug.isAutomatedTestRunning && bug.testProgress >= 1f;
-        
-        autoTestButton.interactable = !bug.isAutomatedTestRunning;
-        rejectButton.interactable = testCompleted;
-        approveButton.interactable = testCompleted;
+        // 自动化跑测停用，判定按钮根据是否有当前bug决定是否可交互
+        bool hasBug = bug != null;
+        rejectButton.interactable = hasBug;
+        approveButton.interactable = hasBug;
+        if (autoTestButton != null) autoTestButton.interactable = false;
     }
     
     private void OnAutoTestClick()
     {
+        // 自动化跑测已停用
         BugManager.Instance.StartAutomatedTest();
     }
     

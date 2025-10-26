@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "ID": 101,
+      "Sender": "QA组长",
+      "Title": "你在做什么？！",
+      "Text": "狗策划偷偷改了技能表！！眼睛睁大点，不可以放过去！！"
+    },
+    {
+      "ID": 102,
+      "Sender": "QA组长",
+      "Title": "Test",
+      "Text": "TestTestTestTestTestTestTestTestTestTestTestTest"
+    },
+    {
+      "ID": 103,
+      "Sender": "狗策划",
+      "Title": "Test",
+      "Text": "TestTestTestTestTestTestTestTestTestTestTestTest"
+    },
+    {
+      "ID": 104,
+      "Sender": "QA组长",
+      "Title": "今日需求",
+      "Text": "不准策划借单提交！！"
+    }
+  ]
+}
